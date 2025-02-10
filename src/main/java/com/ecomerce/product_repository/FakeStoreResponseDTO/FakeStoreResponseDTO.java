@@ -1,14 +1,15 @@
-package com.ecomerce.product_repository.Modells;
+package com.ecomerce.product_repository.FakeStoreResponseDTO;
 
 import lombok.Getter;
 import lombok.Setter;
 
-public class Products {
+
+public class FakeStoreResponseDTO {
     private Integer id;
     private String title;
+    private String category;
     private String description;
-    private String imageUrl;
-    private Category category;
+    private String image;
 
     public Integer getId() {
         return id;
@@ -16,14 +17,6 @@ public class Products {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getDescription() {
@@ -34,19 +27,27 @@ public class Products {
         this.description = description;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getImage() {
+        return image;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImage(String image) {
+        this.image = image;
     }
 
-    public Category getCategory() {
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getCategory() {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(String category) {
         this.category = category;
     }
 }

@@ -1,13 +1,23 @@
 package com.ecomerce.product_repository.Controllers;
 
+import com.ecomerce.product_repository.Modells.Products;
+import com.ecomerce.product_repository.Service.FakeStoreService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class ProductRepositoryController {
 
-    @GetMapping("/product/{id}")
-    public void getProductById(@PathVariable("id") Integer id) {
+    private FakeStoreService fakeService;
+    public ProductRepositoryController(FakeStoreService fakeStoreService) {
+        this.fakeService = fakeStoreService;
+    }
 
+    @GetMapping("/product/{id}")
+    public Products getProductById(@PathVariable("id") Integer id) {
+        if(id==null){
+            throw new IllegalArgumentException("id cannot be null");
+        }
+        return fakeService.getProductsById(id);
     }
     @PostMapping("/product")
     public void createProduct(){
