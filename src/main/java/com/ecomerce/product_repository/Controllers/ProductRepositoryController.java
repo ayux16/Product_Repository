@@ -4,6 +4,8 @@ import com.ecomerce.product_repository.Modells.Products;
 import com.ecomerce.product_repository.Service.FakeStoreService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class ProductRepositoryController {
 
@@ -11,6 +13,8 @@ public class ProductRepositoryController {
     public ProductRepositoryController(FakeStoreService fakeStoreService) {
         this.fakeService = fakeStoreService;
     }
+//    @Autowired
+//    private FakeProductServices fakeProductServices;
 
     @GetMapping("/product/{id}")
     public Products getProductById(@PathVariable("id") Integer id) {
@@ -23,10 +27,10 @@ public class ProductRepositoryController {
     public void createProduct(){
 
     }
-    @GetMapping("/product")
-    public void getAllProducts(){
-
-    }
+//    @GetMapping("/product/")
+//    public List<Products> getAllProducts(){
+//        return fakeProductServices.getAllProducts();
+//    }
     @PutMapping("/product/{id}")
     public void updateProducts(@PathVariable("id") Integer id){
 
