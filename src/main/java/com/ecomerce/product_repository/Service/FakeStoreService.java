@@ -26,7 +26,6 @@ public class FakeStoreService {
         ResponseEntity<FakeStoreResponseDTO> fakeStoreResponse
                 = restTemplate.getForEntity("https://fakestoreapi.com/products/" + id, FakeStoreResponseDTO.class);
 
-
         FakeStoreResponseDTO response=fakeStoreResponse.getBody();
 
         if(response==null) {
@@ -61,5 +60,22 @@ public class FakeStoreService {
         products.setCategory(category);
         products.setImageUrl(response.getImage());
         return products;
+    }
+
+    public Products createProducts(String title, String description, String catTitle, String imageUrl) {
+
+        FakeStoreResponseDTO requestBody = new FakeStoreResponseDTO();
+        requestBody.setTitle(title);
+        requestBody.setCategory(catTitle);
+        requestBody.setDescription(description);
+        requestBody.setImage(imageUrl);
+        ResponseEntity<FakeStoreResponseDTO> responseEntity=
+            restTemplate.postForEntity("https://fakestoreapi.com/products/", requestBody,
+                    FakeStoreResponseDTO.class);
+        // get the status code
+        System.out.println("Status Code "+responseEntity.getStatusCode());
+        //convert the response
+        Products response = convertFakeStoreResponseDTOToProducts(responseEntity.getBody());
+        return response;
     }
 }

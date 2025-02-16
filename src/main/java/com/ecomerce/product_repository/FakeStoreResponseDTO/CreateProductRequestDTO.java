@@ -1,11 +1,13 @@
-package com.ecomerce.product_repository.Modells;
+package com.ecomerce.product_repository.FakeStoreResponseDTO;
 
-public class Products {
+import com.ecomerce.product_repository.Modells.Category;
+
+public class CreateProductRequestDTO {
     private Integer id;
     private String title;
     private String description;
     private String imageUrl;
-    private Category category;
+    private CategoryRequestDTO category;
 
     public Integer getId() {
         return id;
@@ -15,8 +17,8 @@ public class Products {
         this.id = id;
     }
 
-    public String getTitle(String title) {
-        return this.title;
+    public String getTitle() {
+        return title;
     }
 
     public void setTitle(String title) {
@@ -39,11 +41,11 @@ public class Products {
         this.imageUrl = imageUrl;
     }
 
-    public Category getCategory() {
+    public CategoryRequestDTO getCategory() {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(CategoryRequestDTO category) {
         this.category = category;
     }
 }
