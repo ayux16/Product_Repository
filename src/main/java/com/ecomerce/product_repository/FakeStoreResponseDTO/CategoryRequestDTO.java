@@ -1,11 +1,6 @@
-package com.ecomerce.product_repository.Modells;
+package com.ecomerce.product_repository.FakeStoreResponseDTO;
 
-import lombok.Getter;
-import lombok.Setter;
-
-//@Getter
-//@Setter
-public class Category {
+public class CategoryRequestDTO {
     private String title;
     private Integer id;
 
