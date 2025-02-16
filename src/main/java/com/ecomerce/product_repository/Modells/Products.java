@@ -1,19 +1,29 @@
 package com.ecomerce.product_repository.Modells;
 
-public class Products {
-    private Integer id;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToOne;
+
+import java.util.Date;
+
+@Entity
+public class Products extends BaseModel{
     private String title;
     private String description;
     private String imageUrl;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Category category;
 
-    public Integer getId() {
-        return id;
+    public Products(int id, Date created_at, Date updated_at, boolean is_deleted) {
+        super();
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public Products() {
+        super();
     }
+
 
     public String getTitle(String title) {
         return this.title;
