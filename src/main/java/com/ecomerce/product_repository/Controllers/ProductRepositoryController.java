@@ -13,8 +13,6 @@ public class ProductRepositoryController {
     public ProductRepositoryController(FakeStoreService fakeStoreService) {
         this.fakeService = fakeStoreService;
     }
-//    @Autowired
-//    private FakeProductServices fakeProductServices;
 
     @GetMapping("/product/{id}")
     public Products getProductById(@PathVariable("id") Integer id) {
@@ -23,14 +21,20 @@ public class ProductRepositoryController {
         }
         return fakeService.getProductsById(id);
     }
+
+    @GetMapping("/product/")
+    public List<Products> getAllProducts(){
+        List<Products> products= fakeService.getAllProducts();
+        if(products.size()==0){
+            throw new IllegalArgumentException("No products found");
+        }
+        return products;
+    }
+
     @PostMapping("/product")
     public void createProduct(){
 
     }
-//    @GetMapping("/product/")
-//    public List<Products> getAllProducts(){
-//        return fakeProductServices.getAllProducts();
-//    }
     @PutMapping("/product/{id}")
     public void updateProducts(@PathVariable("id") Integer id){
 
