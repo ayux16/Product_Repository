@@ -1,14 +1,12 @@
 package com.ecomerce.product_repository.Modells;
 
-import lombok.Getter;
-import lombok.Setter;
 
-//@Getter
-//@Setter
-public class Category {
+import jakarta.persistence.Entity;
+
+@Entity
+public class Category extends BaseModel {
+
     private String title;
-    private Integer id;
-
 
     public String getTitle() {
         return title;
@@ -18,11 +16,4 @@ public class Category {
         this.title = title;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 }
