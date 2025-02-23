@@ -3,19 +3,10 @@ package com.ecomerce.product_repository.FakeStoreResponseDTO;
 import com.ecomerce.product_repository.Modells.Category;
 
 public class CreateProductRequestDTO {
-    private Integer id;
     private String title;
     private String description;
     private String imageUrl;
     private CategoryRequestDTO category;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;
