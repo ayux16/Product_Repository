@@ -21,7 +21,6 @@ public class FakeStoreService implements ProductService {
     @Override
     public Products getProductsById(Integer id) {
         Products product = new Products();
-
         ResponseEntity<FakeStoreResponseDTO> fakeStoreResponse
                 = restTemplate.getForEntity("https://fakestoreapi.com/products/" + id, FakeStoreResponseDTO.class);
 
