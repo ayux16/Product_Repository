@@ -11,5 +11,6 @@ public interface CategoryRepos extends JpaRepository<Category, Integer> {
 
     Optional<Category> findByTitle(String title);
 
-    Optional<Category> findById(int id);
+    Category findById(int id);
+    Category save(Category category);
 }

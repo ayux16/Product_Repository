@@ -7,4 +7,5 @@ import lombok.Setter;
 @Setter
 public class CategoryRequestDTO {
     private String title;
+    private String createdByUserName;
 }
