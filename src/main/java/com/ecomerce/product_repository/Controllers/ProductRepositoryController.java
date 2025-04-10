@@ -5,10 +5,14 @@ import com.ecomerce.product_repository.FakeStoreResponseDTO.CreateProductRequest
 import com.ecomerce.product_repository.Modells.Products;
 import com.ecomerce.product_repository.Service.ProductService;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class ProductRepositoryController {
@@ -74,5 +78,12 @@ public class ProductRepositoryController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Product not found with ID: " + id); // 404 Not Found
         }
+    }
+
+    @GetMapping("/product/{pageNo}/{pageSize}")
+    public ResponseEntity<Page<Products>> getProductByPage(@PathVariable("pageNo") int pageNo,
+                                            @PathVariable("pageSize") int pageSize) {
+        Page<Products> products= service.getProductByPage(pageNo,pageSize);
+        return ResponseEntity.ok(products);
     }
 }

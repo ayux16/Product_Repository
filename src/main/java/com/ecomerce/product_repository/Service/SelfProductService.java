@@ -6,9 +6,13 @@ import com.ecomerce.product_repository.Modells.Products;
 import com.ecomerce.product_repository.Repository.CategoryRepos;
 import com.ecomerce.product_repository.Repository.ProductRepo;
 import com.ecomerce.product_repository.Repository.Projections.ProductsProjections;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 
 import java.util.Date;
 import java.util.List;
@@ -127,6 +131,16 @@ public class SelfProductService implements ProductService{
         if(title.isEmpty() || description.isEmpty() || catTitle.isEmpty() || imageUrl.isEmpty()) {
             throw new ProductNotFoundException();
         }
+    }
+
+    @Override
+    public Page<Products> getProductByPage(int pageNo, int pageSize) {
+        Pageable pageable= PageRequest.of(pageNo, pageSize);
+        Page<Products>pageProduct= productRepo.findAll(pageable);
+        pageProduct.getTotalPages();
+        pageProduct.getTotalElements();
+        pageProduct.getContent();
+        return pageProduct;
     }
 }
 

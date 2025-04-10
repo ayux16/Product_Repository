@@ -2,6 +2,7 @@ package com.ecomerce.product_repository.Service;
 
 import com.ecomerce.product_repository.Exceptions.ProductNotFoundException;
 import com.ecomerce.product_repository.Modells.Products;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -16,5 +17,6 @@ public interface ProductService {
     public List<Products> updateProducts(Integer id);
 
     public ResponseEntity<String> deleteProducts(Integer id);
+    public Page<Products> getProductByPage(int pageNo, int pageSize);
 
 }

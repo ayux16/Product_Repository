@@ -3,6 +3,7 @@ package com.ecomerce.product_repository.Service;
 import com.ecomerce.product_repository.Modells.Category;
 import com.ecomerce.product_repository.Modells.Products;
 import com.ecomerce.product_repository.FakeStoreResponseDTO.FakeStoreResponseDTO;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -86,6 +87,11 @@ public class FakeStoreService implements ProductService {
 
     @Override
     public ResponseEntity<String> deleteProducts(Integer id) {
+        return null;
+    }
+
+    @Override
+    public Page<Products> getProductByPage(int pageNo, int pageSize) {
         return null;
     }
 }
