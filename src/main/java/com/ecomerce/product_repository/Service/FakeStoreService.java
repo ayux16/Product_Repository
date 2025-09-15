@@ -1,5 +1,7 @@
 package com.ecomerce.product_repository.Service;
 
+import com.ecomerce.product_repository.Exceptions.ProductNotFoundException;
+import com.ecomerce.product_repository.FakeStoreResponseDTO.CreateProductRequestDTO;
 import com.ecomerce.product_repository.Modells.Category;
 import com.ecomerce.product_repository.Modells.Products;
 import com.ecomerce.product_repository.FakeStoreResponseDTO.FakeStoreResponseDTO;
@@ -81,9 +83,14 @@ public class FakeStoreService implements ProductService {
     }
 
     @Override
-    public List<Products> updateProducts(Integer id) {
+    public Products updateProducts(Integer id, CreateProductRequestDTO request) throws ProductNotFoundException {
         return null;
     }
+//
+//    @Override
+//    public List<Products> updateProducts(Integer id) {
+//        return null;
+//    }
 
     @Override
     public ResponseEntity<String> deleteProducts(Integer id) {

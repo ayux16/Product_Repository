@@ -1,6 +1,7 @@
 package com.ecomerce.product_repository.Service;
 
 import com.ecomerce.product_repository.Exceptions.ProductNotFoundException;
+import com.ecomerce.product_repository.FakeStoreResponseDTO.CreateProductRequestDTO;
 import com.ecomerce.product_repository.Modells.Category;
 import com.ecomerce.product_repository.Modells.Products;
 import com.ecomerce.product_repository.Repository.CategoryRepos;
@@ -36,33 +37,31 @@ public class SelfProductService implements ProductService{
 
     @Override
     public List<Products> getAllProducts() {
-        ProductsProjections res= productRepo.findByTitle("Google");
-        System.out.println("Hello brother this is the response hahaha"+res.getTitle()+" "+res.getImage()+"  "+res.getDescription()+"\n");
-       List<Products> products = productRepo.findAll();
-       return products;
+        ProductsProjections res = productRepo.findByTitle("Google");
+
+        if (res != null) {
+            System.out.println("Projection Result:");
+            System.out.println("Title: " + res.getTitle());
+            System.out.println("Image: " + res.getImage());
+            System.out.println("Description: " + res.getDescription());
+        } else {
+            System.out.println("No product found with title 'Google'");
+        }
+
+        List<Products> products = productRepo.findAll();
+        return products;
     }
 
     @Override
     public Products createProducts(String title, String description, String imageUrl,String catTitle) throws ProductNotFoundException {
-
         Category category=new Category();
         Products products = new Products();
-
-        //step 1 validations
         validations(title,description,catTitle,imageUrl);
-        //Set products details
 
         Optional<Category> optionalCategory = categoryRepo.findByTitle(catTitle);
         if (optionalCategory.isPresent()) {
             // If the category exists, use it
             category = optionalCategory.get();
-
-            products.setTitle(title);
-            products.setDescription(description);
-            products.setImageUrl(imageUrl);
-            products.setCreated_at(new Date());
-            products.setUpdated_at(new Date());
-
         } else {
             // If the category does not exist, create a new one
             category = new Category();
@@ -70,51 +69,49 @@ public class SelfProductService implements ProductService{
             categoryRepo.save(category); // Save the new category to the database
         }
 
-        // Set the category for the product
+        // ✅ Always set product details (moved outside the if/else)
+        products.setTitle(title);
+        products.setDescription(description);
+        products.setImageUrl(imageUrl);
+        products.setCreated_at(new Date());
+        products.setUpdated_at(new Date());
         products.setCategory(category);
 
-        //step 3: call database;
-        Products response=productRepo.save(products);
-
-        return response;
+        // step 3: save product
+        return productRepo.save(products);
     }
 
     @Override
-    public List<Products> updateProducts(Integer id) {
-//        Category category=new Category();
-//        Products products = new Products();
-//
-//        //step 1 validations
-//        validations(title,description,catTitle,imageUrl);
-//        //Set products details
-//
-//
-//        products.setTitle(title);
-//        products.setDescription(description);
-//        products.setImageUrl(imageUrl);
-//        products.setCreated_at(new Date());
-//        products.setUpdated_at(new Date());
-//
-//        Optional<Category> optionalCategory = categoryRepo.findByTitle(catTitle);
-//        if (optionalCategory.isPresent()) {
-//            // If the category exists, use it
-//            category = optionalCategory.get();
-//        } else {
-//            // If the category does not exist, create a new one
-//            category = new Category();
-//            category.setTitle(catTitle);
-//            categoryRepo.save(category); // Save the new category to the database
-//        }
-//
-//        // Set the category for the product
-//        products.setCategory(category);
-//
-//        //step 3: call database;
-//        Products response=productRepo.save(products);
-//
-//        return response;
-        return null;
+    public Products updateProducts(Integer id, CreateProductRequestDTO request) throws ProductNotFoundException {
+        Products existingProduct = productRepo.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException("Product not found with ID: " + id));
+
+        if (request.getTitle() != null && !request.getTitle().isEmpty()) {
+            existingProduct.setTitle(request.getTitle());
+        }
+        if (request.getDescription() != null && !request.getDescription().isEmpty()) {
+            existingProduct.setDescription(request.getDescription());
+        }
+        if (request.getImageUrl() != null && !request.getImageUrl().isEmpty()) {
+            existingProduct.setImageUrl(request.getImageUrl());
+        }
+
+        if (request.getCategory() != null && request.getCategory().getTitle() != null) {
+            String catTitle = request.getCategory().getTitle();
+            Category category = categoryRepo.findByTitle(catTitle)
+                    .orElseGet(() -> {
+                        Category newCategory = new Category();
+                        newCategory.setTitle(catTitle);
+                        return categoryRepo.save(newCategory);
+                    });
+            existingProduct.setCategory(category);
+        }
+
+        existingProduct.setUpdated_at(new Date());
+        return productRepo.save(existingProduct);
     }
+
+
 
     @Override
     public ResponseEntity<String> deleteProducts(Integer id) {

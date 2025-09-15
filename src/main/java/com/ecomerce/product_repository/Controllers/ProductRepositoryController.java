@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/product")
 public class ProductRepositoryController {
 
     private ProductService service;
@@ -22,7 +23,8 @@ public class ProductRepositoryController {
         this.service = serve;
     }
 
-    @GetMapping("/product/{id}")
+    //get product by id working
+    @GetMapping("/{id}")
     public Products getProductById(@PathVariable("id") Integer id) throws ProductNotFoundException {
         if(id==1000){
             throw new IllegalArgumentException("id cannot be 1000");
@@ -34,19 +36,24 @@ public class ProductRepositoryController {
         return product;
     }
 
-    @GetMapping("/product/")
+
+    //working get all product
+    @GetMapping()
     public ResponseEntity<List<Products>> getAllProducts() throws ProductNotFoundException {
-        List<Products> products= service.getAllProducts();
-        if(products.size()==0){
+        List<Products> products = service.getAllProducts();
+
+        if (products == null) {
+            throw new ProductNotFoundException("Products cannot be null");
+        }
+
+        if (products.isEmpty()) {
             throw new IllegalArgumentException("No products found");
         }
-        if(products==null){
-            throw new ProductNotFoundException("products cannot be null");
-        }
-        return ResponseEntity.ok(products);//http status code is 200
+
+        return ResponseEntity.ok(products); // 200 OK
     }
 
-    @PostMapping("/product")
+ /***   @PostMapping("/product")
     public Products createProduct(@RequestBody CreateProductRequestDTO request) throws ProductNotFoundException {
         if(request.getDescription()==null){
             throw new IllegalArgumentException("description cannot be null");
@@ -61,13 +68,35 @@ public class ProductRepositoryController {
                 request.getCategory().getTitle()
                 );
     }
+     @PostMapping("/category")
+        public ResponseEntity<?> createCategory(@RequestBody List<CategoryRequestDTO> categoryRequestDTO) {
+           for(CategoryRequestDTO dto : categoryRequestDTO) {
+               categoryService.createCategory(dto.getTitle());
+           }
+            return ResponseEntity.ok("Created SuccessFully");
+        }
+    ***/
+
+
+    //create propducts working
+    @PostMapping()
+    public ResponseEntity<?> createProduct(@RequestBody List<CreateProductRequestDTO> createProductRequestDTO) throws ProductNotFoundException {
+        for(CreateProductRequestDTO dto : createProductRequestDTO){
+            service.createProducts(dto.getTitle(),
+                    dto.getDescription(),
+                    dto.getImageUrl(),
+                    dto.getCategory().getTitle());
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
 //    @PutMapping("/product/{id}")
 //    public ResponseEntity<Products> updateProducts(@RequestBody CreateProductRequestDTO request) Integer id){
 //        //service.updateProducts()
 //        return ResponseEntity.ok(service.getProductsById(id));
 //    }
 
-    @DeleteMapping("/product/{id}")
+    //working delete product
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteProducts(@PathVariable("id") Integer id) {
         // Check if the product exists
         if (service.getProductsById(id) != null) {
@@ -80,7 +109,18 @@ public class ProductRepositoryController {
         }
     }
 
-    @GetMapping("/product/{pageNo}/{pageSize}")
+
+    //update working fine
+    @PutMapping("/{id}")
+    public ResponseEntity<Products> updateProduct(
+            @PathVariable("id") Integer id,
+            @RequestBody CreateProductRequestDTO request) throws ProductNotFoundException {
+
+        Products updatedProduct = service.updateProducts(id, request);
+        return ResponseEntity.ok(updatedProduct);
+    }
+    //working by page numebr and size
+    @GetMapping("/{pageNo}/{pageSize}")
     public ResponseEntity<Page<Products>> getProductByPage(@PathVariable("pageNo") int pageNo,
                                             @PathVariable("pageSize") int pageSize) {
         Page<Products> products= service.getProductByPage(pageNo,pageSize);

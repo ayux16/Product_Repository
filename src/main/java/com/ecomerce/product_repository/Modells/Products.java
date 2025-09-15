@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @Entity
 public class Products extends BaseModel{
-    @Column(name = "title", nullable = false) // Ensure this is mapped correctly
+    @Column(name = "title") // Ensure this is mapped correctly
     private String title;
     private String description;
     private String imageUrl;
