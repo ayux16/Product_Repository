@@ -1,9 +1,12 @@
 package com.ecomerce.product_repository.Controllers;
 
+import com.ecomerce.product_repository.Commons.AuthUtils;
 import com.ecomerce.product_repository.Exceptions.ProductNotFoundException;
 import com.ecomerce.product_repository.FakeStoreResponseDTO.CreateProductRequestDTO;
+import com.ecomerce.product_repository.FakeStoreResponseDTO.UserDTO;
 import com.ecomerce.product_repository.Modells.Products;
 import com.ecomerce.product_repository.Service.ProductService;
+import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -19,8 +22,11 @@ import java.util.Map;
 public class ProductRepositoryController {
 
     private ProductService service;
-    public ProductRepositoryController(@Qualifier("selfProductService") ProductService serve) {
+    private AuthUtils authUtils;
+
+    public ProductRepositoryController(@Qualifier("selfProductService") ProductService serve, AuthUtils authUtils) {
         this.service = serve;
+        this.authUtils = authUtils;
     }
 
     //get product by id working
@@ -38,44 +44,20 @@ public class ProductRepositoryController {
 
 
     //working get all product
-    @GetMapping()
-    public ResponseEntity<List<Products>> getAllProducts() throws ProductNotFoundException {
+    @GetMapping("/all/{tokenValue}")
+    public ResponseEntity<List<Products>> getAllProducts(@PathVariable String tokenValue) throws ProductNotFoundException {
+
+        UserDTO userDTO=authUtils.ValidateToken(tokenValue);
+        ResponseEntity<List<Products>> responseEntity=null;
+        if(userDTO==null){
+           responseEntity = new ResponseEntity<>
+                   (HttpStatus.UNAUTHORIZED);
+        }
         List<Products> products = service.getAllProducts();
-
-        if (products == null) {
-            throw new ProductNotFoundException("Products cannot be null");
-        }
-
-        if (products.isEmpty()) {
-            throw new IllegalArgumentException("No products found");
-        }
-
-        return ResponseEntity.ok(products); // 200 OK
+        responseEntity=new ResponseEntity<>(service.getAllProducts(),
+                HttpStatus.OK);
+        return responseEntity;
     }
-
- /***   @PostMapping("/product")
-    public Products createProduct(@RequestBody CreateProductRequestDTO request) throws ProductNotFoundException {
-        if(request.getDescription()==null){
-            throw new IllegalArgumentException("description cannot be null");
-        }
-        if(request.getTitle()==null || request.getCategory().getTitle()==null){
-            throw new IllegalArgumentException("title cannot be null");
-        }
-        return service.createProducts(
-                request.getTitle(),
-                request.getDescription(),
-                request.getImageUrl(),
-                request.getCategory().getTitle()
-                );
-    }
-     @PostMapping("/category")
-        public ResponseEntity<?> createCategory(@RequestBody List<CategoryRequestDTO> categoryRequestDTO) {
-           for(CategoryRequestDTO dto : categoryRequestDTO) {
-               categoryService.createCategory(dto.getTitle());
-           }
-            return ResponseEntity.ok("Created SuccessFully");
-        }
-    ***/
 
 
     //create propducts working
