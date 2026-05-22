@@ -14,7 +14,8 @@ public class AuthUtils {
     }
     public UserDTO ValidateToken(String token){
         return restTemplate.getForObject(
-                "http://localhost:8081/users/validate/"+token,
+//                We are hadcoding the url
+                "http://USERSERVICE_REPOSITORY/users/validate/"+token,
                 UserDTO.class);
     }
 
